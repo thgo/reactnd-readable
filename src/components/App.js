@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Container, Dimmer, Loader } from 'semantic-ui-react'
 import LoadingBar from 'react-redux-loading'
 import { handleInitialData } from '../actions/shared'
+import PostsPage from './post/PostsPage'
 
 class App extends Component {
 
@@ -14,9 +15,7 @@ class App extends Component {
     return (
       <Fragment>
         <LoadingBar />
-          <Container>
-            ReactND Readable
-          </Container>
+        <PostsPage />
       </Fragment>
 
     )

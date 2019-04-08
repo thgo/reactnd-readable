@@ -14,19 +14,19 @@ const headers = {
 export function getInitialData () {
   return Promise.all([
     getAllCategories(),
-    getAllPosts(),
+    getAllPosts()
   ]).then(([categories, posts]) => ({
     categories,
-    posts,
+    posts
   }))
 }
 
 export const getAllCategories = () =>
   fetch(`${api}/categories`, { headers })
     .then(res => res.json())
-    .then(categories => categories)
+    .then(data => data.categories)
 
 export const getAllPosts = () =>
   fetch(`${api}/posts`, { headers })
     .then(res => res.json())
-    .then(posts => posts)
+    .then(posts => Object.values(posts))
