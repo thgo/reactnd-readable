@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
-import { Container } from 'semantic-ui-react'
 import Post from './Post'
 
 class PostPage extends Component {
@@ -10,12 +9,12 @@ class PostPage extends Component {
     const { postsIds } = this.props
 
     return (
-      <Container>
+      <Fragment>
         { postsIds && postsIds.map(id => (
             <Post key={id} id={id} />
           ))
         }
-      </Container>
+      </Fragment>
     )
   }
 }

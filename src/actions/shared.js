@@ -7,7 +7,7 @@ export function handleInitialData () {
   return (dispatch) => {
     dispatch(showLoading())
     return getInitialData()
-      .then(({ categories, posts, comments }) => {
+      .then(({ categories, posts }) => {
         dispatch(receiveCategories(categories))
         dispatch(receivePosts(posts))
         dispatch(hideLoading())
