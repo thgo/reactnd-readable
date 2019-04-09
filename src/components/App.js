@@ -4,7 +4,6 @@ import LoadingBar from 'react-redux-loading'
 import { handleInitialData } from '../actions/shared'
 import PostsPage from './post/PostsPage'
 import { Container, Grid } from 'semantic-ui-react'
-import Categories from './categories/Categories'
 import Nav from './header/Nav'
 
 class App extends Component {
@@ -15,15 +14,11 @@ class App extends Component {
 
   render() {
     return (
+
       <Fragment>
         <LoadingBar />
         <Nav />
-        <Container style={{ marginTop: '7em' }}>
-          <Grid centered columns={1}>
-            <Grid.Column textAlign='center'>
-              <Categories />
-            </Grid.Column>
-          </Grid>
+        <Container style={{marginTop: '5em'}}>
           <Grid centered columns={2}>
             <Grid.Column textAlign='center'>
               <PostsPage />
