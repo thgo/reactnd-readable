@@ -1,6 +1,4 @@
-
-const api = "http://localhost:3001"
-
+import axios from 'axios'
 
 let token = localStorage.token
 if (!token)
@@ -10,6 +8,12 @@ const headers = {
   'Accept': 'application/json',
   'Authorization': token
 }
+
+const api = axios.create({
+  baseURL: 'http://localhost:3001',
+  timeout: 1000,
+  headers
+});
 
 export function getInitialData () {
   return Promise.all([
@@ -22,11 +26,13 @@ export function getInitialData () {
 }
 
 export const getAllCategories = () =>
-  fetch(`${api}/categories`, { headers })
-    .then(res => res.json())
-    .then(data => data.categories)
+  api.get('/categories')
+    .then(res => res.data)
 
 export const getAllPosts = () =>
-  fetch(`${api}/posts`, { headers })
-    .then(res => res.json())
-    .then(posts => Object.values(posts))
+  api('/posts')
+    .then(posts => Object.values(posts.data))
+
+export const votePostAPI = (postId, vote) => {
+  return api.post(`/posts/${postId}`, { option: vote })
+}

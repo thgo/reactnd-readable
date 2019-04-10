@@ -18,9 +18,9 @@ class App extends Component {
       <Fragment>
         <LoadingBar />
         <Nav />
-        <Container style={{marginTop: '5em'}}>
+        <Container style={{marginTop: '5em'}} textAlign='center'>
           <Grid centered columns={2}>
-            <Grid.Column textAlign='center'>
+            <Grid.Column>
               <PostsPage />
             </Grid.Column>
           </Grid>

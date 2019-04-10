@@ -21,11 +21,12 @@ class Categories extends Component {
     this.setState({ activeItem: name })
   }
 
-  handleOrder = (e, name ) => {
+  handleOrder = (e, { value }) => {
     e.preventDefault()
     const { dispatch } = this.props
-    this.setState({ orderBy: name })
-    dispatch(handleSortPosts(name))
+
+    this.setState({ orderBy: value })
+    dispatch(handleSortPosts(value))
   }
 
   render() {
@@ -43,7 +44,12 @@ class Categories extends Component {
             onClick={this.handleItemClick}
           />
           { categories && categories.map(c => (
-              <Menu.Item key={c.name} name={c.name} active={activeItem === c.name} onClick={this.handleItemClick} />
+              <Menu.Item
+                key={c.name}
+                name={c.name}
+                active={activeItem === c.name}
+                onClick={this.handleItemClick}
+              />
             ))
           }
           <Menu.Menu position='right'>
@@ -52,12 +58,12 @@ class Categories extends Component {
                 <Dropdown.Item
                   text='Date'
                   value='date'
-                  onClick={(e) => this.handleOrder(e, 'date')}
+                  onClick={this.handleOrder}
                 />
                 <Dropdown.Item
                   text='Votes'
                   value='votes'
-                  onClick={(e) => this.handleOrder(e, 'votes')}
+                  onClick={this.handleOrder}
                 />
               </Dropdown.Menu>
             </Dropdown>
