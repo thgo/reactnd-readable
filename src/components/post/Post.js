@@ -1,8 +1,9 @@
 import React, { Component } from "react"
 import _ from 'lodash'
 import { connect } from "react-redux"
+import { Link } from 'react-router-dom'
 import Moment from 'react-moment'
-import { Card, Icon, Grid, Segment, CardDescription, Statistic, Divider, Rating, Button } from "semantic-ui-react"
+import { Card, Icon, Grid, Statistic, Button } from "semantic-ui-react"
 import { handleVotePost } from '../../actions/posts'
 
 class Post extends Component {
@@ -10,7 +11,6 @@ class Post extends Component {
   handleLike = (e, { name }) => {
     e.preventDefault()
     const { dispatch, post } = this.props
-    console.log('Chamnou o handle: ', name)
     dispatch(handleVotePost(post, name))
   }
 
@@ -18,12 +18,12 @@ class Post extends Component {
     const { post } = this.props
 
     return (
-      <Card fluid>
+      <Card link fluid>
         <Card.Content>
           <Grid columns={2}>
             <Grid.Column width={13}>
               <Card.Header style={{fontWeight: 'bold', fontSize: '1.3em'}}>{ post.title }</Card.Header>
-              <Card.Meta style={{color: 'red'}}>
+              <Card.Meta style={{color: '#F0577C'}}>
                 <Icon name='user outline' /> { post.author }
               </Card.Meta>
             </Grid.Column>
@@ -46,14 +46,15 @@ class Post extends Component {
           <Grid columns='equal'>
             <Grid.Row>
               <Grid.Column>
-                <Segment>
-                  <Icon name='clock outline' /> <Moment fromNow date={post.timestamp} />
-                </Segment>
+                <Icon name='clock outline' /> <Moment fromNow date={post.timestamp} />
               </Grid.Column>
               <Grid.Column>
-                <Segment>
-                  <Icon name='comment alternate outline' /> { post.commentCount } Comments
-                </Segment>
+                <Icon name='comment alternate outline' /> { post.commentCount } Comments
+              </Grid.Column>
+              <Grid.Column textAlign='right'>
+                <Link title='Edit this post' to={`/post/${post.id}`}>
+                  <Icon name='edit'></Icon>
+                </Link>
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -80,11 +81,8 @@ class Post extends Component {
 }
 
 function mapStateToProps({ posts }, { id }) {
-  console.log("POSTS", posts)
-  const post = _.find(posts, { id })
-
   return {
-    post
+    post: _.find(posts, { id })
   }
 }
 

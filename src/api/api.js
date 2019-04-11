@@ -17,22 +17,25 @@ const api = axios.create({
 
 export function getInitialData () {
   return Promise.all([
-    getAllCategories(),
-    getAllPosts()
+    getAllCategoriesAPI(),
+    getAllPostsAPI()
   ]).then(([categories, posts]) => ({
     categories,
     posts
   }))
 }
 
-export const getAllCategories = () =>
+export const getAllCategoriesAPI = () =>
   api.get('/categories')
-    .then(res => res.data)
+    .then(res => res.data.categories)
 
-export const getAllPosts = () =>
+export const getAllPostsAPI = () =>
   api('/posts')
-    .then(posts => Object.values(posts.data))
+    .then(posts => posts.data)
 
-export const votePostAPI = (postId, vote) => {
-  return api.post(`/posts/${postId}`, { option: vote })
-}
+export const votePostAPI = (postId, vote) =>
+  api.post(`/posts/${postId}`, { option: vote })
+
+export const filterPostsAPI = (category) =>
+  api.get(`/${category}/posts`)
+    .then(posts => posts.data)

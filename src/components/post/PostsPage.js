@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 import Post from './Post'
+import NothingHere from '../NothingHere'
 
 class PostPage extends Component {
 
@@ -10,6 +11,7 @@ class PostPage extends Component {
 
     return (
       <Fragment>
+        { postsIds.length === 0 && <NothingHere /> }
         { postsIds && postsIds.map(id => (
             <Post key={id} id={id} />
           ))

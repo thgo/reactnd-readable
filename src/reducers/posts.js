@@ -1,4 +1,4 @@
-import { RECEIVE_POSTS, SORT_POSTS, VOTE_POST } from '../actions/posts'
+import { RECEIVE_POSTS, SORT_POSTS, VOTE_POST, FILTER_POSTS, RECEIVE_ALL_POSTS } from '../actions/posts'
 import _ from 'lodash'
 
 export default function posts (state = {}, action) {
@@ -10,20 +10,24 @@ export default function posts (state = {}, action) {
           ? _.sortBy(state, 'voteScore')
           : _.sortBy(state, 'timestamp')
     case VOTE_POST :
+
       const postPosition = Object.keys(state).filter(item =>
         state[item].id === action.post.id)
 
-      console.log('BLA BLA BLA: ', action)
       return {
         ...state,
         [postPosition]: {
           ...state[postPosition],
-            voteScore: action.post.vote === 'upVote'
-              ? state[postPosition].voteScore + 1
-              : state[postPosition].voteScore - 1
+            voteScore: action.vote === 'upVote'
+              ? action.post.voteScore + 1
+              : action.post.voteScore - 1
         }
       }
 
+    case FILTER_POSTS :
+      return action.category !== 'all'
+        ? _.filter(action.posts, { category: action.category })
+        : action.posts
     default :
       return state
   }

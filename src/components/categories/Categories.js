@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Menu, Segment, Input, Dropdown } from 'semantic-ui-react'
-import { handleSortPosts } from '../../actions/posts'
+import { Menu, Segment, Dropdown } from 'semantic-ui-react'
+import { handleSortPosts, handlePostsByCategory } from '../../actions/posts'
 
 class Categories extends Component {
 
@@ -19,6 +19,9 @@ class Categories extends Component {
   handleItemClick = (e, { name }) => {
     e.preventDefault()
     this.setState({ activeItem: name })
+
+    const { dispatch } = this.props
+    dispatch(handlePostsByCategory(name))
   }
 
   handleOrder = (e, { value }) => {
@@ -33,8 +36,6 @@ class Categories extends Component {
     const { activeItem, orderBy } = this.state
     const { categories } = this.props
 
-    console.log('categories', this.props)
-
     return (
       <Segment style={{margin: 0}}>
         <Menu pointing secondary>
@@ -42,6 +43,8 @@ class Categories extends Component {
             name='all'
             active={activeItem === 'all'}
             onClick={this.handleItemClick}
+            as={Link}
+            to="/"
           />
           { categories && categories.map(c => (
               <Menu.Item
@@ -49,11 +52,13 @@ class Categories extends Component {
                 name={c.name}
                 active={activeItem === c.name}
                 onClick={this.handleItemClick}
+                as={Link}
+                to={`/${c.name}/posts`}
               />
             ))
           }
           <Menu.Menu position='right'>
-            <Dropdown text={`Order by: ${orderBy}`}>
+            <Dropdown text={`Sort by: ${orderBy}`}>
               <Dropdown.Menu>
                 <Dropdown.Item
                   text='Date'

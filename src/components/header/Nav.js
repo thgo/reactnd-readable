@@ -5,10 +5,10 @@ import Categories from '../categories/Categories';
 
 export default function Header () {
   return (
-    <Container fluid>
+    <Container fluid style={{position: 'fixed', zIndex: '999'}}>
       <Segment style={{height: '170px', borderRadius: '0', backgroundColor: '#6335BF'}}>
-        Readable
-        <Container style={{marginTop: '66px'}}>
+        <Link to='/'><h1>Readable</h1></Link>
+        <Container style={{marginTop: '49px'}}>
           <Categories />
         </Container>
       </Segment>
