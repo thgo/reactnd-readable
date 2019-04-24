@@ -1,40 +1,59 @@
 import React, { Component } from 'react'
+import _ from 'lodash'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Menu, Segment, Dropdown } from 'semantic-ui-react'
-import { handleSortPosts, handlePostsByCategory } from '../../actions/posts'
+import { handlePostsByCategory, getAllPosts } from '../../store/actions/posts'
+import { sortBy } from '../../store/actions/sortBy'
+import { toggleCategory } from '../../store/actions/category';
 
 class Categories extends Component {
 
   state = {
-    activeItem: 'all',
-    orderBy: 'date'
+    activeItem: 'all'
   }
 
   options = [
-    { key: 1, text: 'Date', value: 'date' },
-    { key: 2, text: 'Points', value: 'points' }
+    { key: 1, text: 'Date', value: 'timestamp' },
+    { key: 2, text: 'Votescore', value: 'voteScore' }
   ]
 
+  componentDidMount() {
+
+    const { category } = this.props
+
+    console.log('DID MOUNT: ', category)
+
+    if (typeof category == String)
+      this.setState({ activeItem: category })
+
+  }
+
   handleItemClick = (e, { name }) => {
-    e.preventDefault()
-    this.setState({ activeItem: name })
+    this.setState({ activeItem: name, category: name })
 
     const { dispatch } = this.props
-    dispatch(handlePostsByCategory(name))
+
+    dispatch(toggleCategory(name))
+
+    if (name !== 'all') {
+      dispatch(handlePostsByCategory(name))
+    } else {
+      dispatch(getAllPosts())
+    }
   }
 
   handleOrder = (e, { value }) => {
     e.preventDefault()
     const { dispatch } = this.props
 
-    this.setState({ orderBy: value })
-    dispatch(handleSortPosts(value))
+    dispatch(sortBy(value))
   }
 
   render() {
-    const { activeItem, orderBy } = this.state
-    const { categories } = this.props
+    const { activeItem } = this.state
+    const { categories, sortBy } = this.props
+    const option = _.find(this.options, {value: sortBy})
 
     return (
       <Segment style={{margin: 0}}>
@@ -46,28 +65,29 @@ class Categories extends Component {
             as={Link}
             to="/"
           />
-          { categories && categories.map(c => (
+          { categories && categories.length > 0 && categories.map((category, idx) => (
               <Menu.Item
-                key={c.name}
-                name={c.name}
-                active={activeItem === c.name}
+                key={idx}
+                name={category.name}
+                content={category.name}
+                active={activeItem === category.name}
                 onClick={this.handleItemClick}
                 as={Link}
-                to={`/${c.name}/posts`}
+                to={`/posts/${category.path}`}
               />
             ))
           }
           <Menu.Menu position='right'>
-            <Dropdown text={`Sort by: ${orderBy}`}>
+            <Dropdown text={`Sort by: ${option ? option.text : ''}`}>
               <Dropdown.Menu>
                 <Dropdown.Item
                   text='Date'
-                  value='date'
+                  value='timestamp'
                   onClick={this.handleOrder}
                 />
                 <Dropdown.Item
-                  text='Votes'
-                  value='votes'
+                  text='Votescore'
+                  value='voteScore'
                   onClick={this.handleOrder}
                 />
               </Dropdown.Menu>
@@ -79,12 +99,13 @@ class Categories extends Component {
   }
 }
 
-function mapStateToProps ({ categories }) {
+function mapStateToProps ({ categories, sortBy, category }) {
 
   return {
-    categories: Object.values(categories)
+    categories: Object.values(categories),
+    sortBy,
+    category
   }
-
 }
 
 export default connect(mapStateToProps)(Categories)

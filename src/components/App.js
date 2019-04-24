@@ -3,11 +3,12 @@ import { connect } from 'react-redux'
 import LoadingBar from 'react-redux-loading'
 import { Container, Grid } from 'semantic-ui-react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { handleInitialData } from '../actions/shared'
+import { handleInitialData } from '../store/actions/shared'
 import PostsPage from './post/PostsPage'
 
 import Nav from './header/Nav'
-import PostDetails from './post/PostDetails';
+import PostEdit from './post/PostEdit';
+import NewPost from './post/NewPost';
 
 class App extends Component {
 
@@ -17,24 +18,25 @@ class App extends Component {
 
   render() {
     return (
-      <Switch>
-        <Router>
-          <Fragment>
-            <LoadingBar />
-            <Nav />
-            <Container style={{marginTop: '15em'}} textAlign='center'>
-              <Grid centered columns={2}>
-                <Grid.Column>
-                  <Route path='/' exact component={PostsPage} />
-                  <Route path='/:category/posts' exact component={PostsPage} />
-                  <Route path='/post/:id' exact component={PostDetails} />
-                </Grid.Column>
-              </Grid>
-            </Container>
+      <Router>
+        <Fragment>
 
-          </Fragment>
-        </Router>
-      </Switch>
+          <LoadingBar />
+          <Nav />
+
+          <Container style={{marginTop: '14em'}} textAlign='center'>
+            <Grid centered columns={2}>
+              <Grid.Column>
+                <Route path='/' exact component={PostsPage} />
+                <Route path='/posts/:category' component={PostsPage} />
+                <Route path='/edit/post/:id' component={PostEdit} />
+                <Route path='/new' component={NewPost} />
+              </Grid.Column>
+            </Grid>
+          </Container>
+
+        </Fragment>
+      </Router>
     )
   }
 }

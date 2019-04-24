@@ -3,8 +3,9 @@ import _ from 'lodash'
 import { connect } from "react-redux"
 import { Link } from 'react-router-dom'
 import Moment from 'react-moment'
-import { Card, Icon, Grid, Statistic, Button } from "semantic-ui-react"
-import { handleVotePost } from '../../actions/posts'
+import { Card, Icon, Grid, Statistic, Button, Menu, Dropdown } from "semantic-ui-react"
+import { handleVotePost, handleDeletePost } from '../../store/actions/posts'
+import { formatDate } from "../../utils/utils";
 
 class Post extends Component {
 
@@ -12,6 +13,21 @@ class Post extends Component {
     e.preventDefault()
     const { dispatch, post } = this.props
     dispatch(handleVotePost(post, name))
+  }
+
+  handleDeletePost = (e) => {
+    e.preventDefault()
+    console.log('DELETE')
+
+    const { dispatch, id } = this.props
+
+    dispatch(handleDeletePost(id))
+  }
+
+  handleEditPost = (e) => {
+    e.preventDefault()
+    console.log('EDIT')
+    //TODO: FAZER
   }
 
   render() {
@@ -28,7 +44,7 @@ class Post extends Component {
               </Card.Meta>
             </Grid.Column>
             <Grid.Column width={3} >
-              <Statistic size='mini' floated='right'>
+              <Statistic size='mini' floated='right' style={{margin: 0}}>
                 <Statistic.Value>
                   <Icon name='star' size='small'/>
                   {post.voteScore}
@@ -46,15 +62,23 @@ class Post extends Component {
           <Grid columns='equal'>
             <Grid.Row>
               <Grid.Column>
-                <Icon name='clock outline' /> <Moment fromNow date={post.timestamp} />
+                <Icon name='clock outline' /> <Moment fromNow date={post.timestamp} title={formatDate(post.timestamp)}/>
               </Grid.Column>
               <Grid.Column>
                 <Icon name='comment alternate outline' /> { post.commentCount } Comments
               </Grid.Column>
               <Grid.Column textAlign='right'>
-                <Link title='Edit this post' to={`/post/${post.id}`}>
+                <Dropdown icon="ellipsis vertical" title='Options' onChange={this.handleChange}>
+                  <Dropdown.Menu>
+                    <Dropdown.Item icon='edit outline' text='Edit' title='Edit this post' onClick={this.handleEditPost} />
+                    <Dropdown.Item icon='trash alternate outline' text='Remove' title='Delete this post' onClick={this.handleDeletePost} />
+                  </Dropdown.Menu>
+                </Dropdown>
+
+
+                {/* <Link title='Edit this post' to={`/edit/post/${post.id}`}>
                   <Icon name='edit'></Icon>
-                </Link>
+                </Link> */}
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -82,7 +106,8 @@ class Post extends Component {
 
 function mapStateToProps({ posts }, { id }) {
   return {
-    post: _.find(posts, { id })
+    post: _.find(posts, { id }),
+    id
   }
 }
 

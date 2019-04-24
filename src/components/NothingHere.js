@@ -1,5 +1,5 @@
 import React from 'react'
-import { Segment, Header, Icon, Card, CardDescription, CardContent, Button } from 'semantic-ui-react';
+import { Segment, Header, Icon, Card, CardContent, Button } from 'semantic-ui-react';
 
 export default function NothingHere () {
   return (

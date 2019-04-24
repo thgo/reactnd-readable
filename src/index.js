@@ -6,8 +6,8 @@ import 'semantic-ui-css/semantic.min.css'
 import App from './components/App'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
-import middleware from './middleware'
-import reducers from './reducers'
+import middleware from './store/middleware'
+import reducers from './store/reducers'
 
 const store = createStore(reducers, middleware)
 

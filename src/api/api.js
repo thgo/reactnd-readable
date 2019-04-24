@@ -15,6 +15,10 @@ const api = axios.create({
   headers
 });
 
+export function generateUID () {
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+}
+
 export function getInitialData () {
   return Promise.all([
     getAllCategoriesAPI(),
@@ -30,7 +34,7 @@ export const getAllCategoriesAPI = () =>
     .then(res => res.data.categories)
 
 export const getAllPostsAPI = () =>
-  api('/posts')
+  api.get('/posts')
     .then(posts => posts.data)
 
 export const votePostAPI = (postId, vote) =>
@@ -39,3 +43,11 @@ export const votePostAPI = (postId, vote) =>
 export const filterPostsAPI = (category) =>
   api.get(`/${category}/posts`)
     .then(posts => posts.data)
+
+export const addPostAPI = (post) =>
+  api.post('/posts', post)
+    .then(res => res.data)
+
+export const deletePostAPI = (id) =>
+  api.delete(`/posts/${id}`)
+    .then(res => res)

@@ -1,13 +1,10 @@
-import React, { Component, Fragment } from 'react'
+import React, { Fragment } from 'react'
+import _ from 'lodash'
 import { connect } from 'react-redux'
 import Post from './Post'
 import NothingHere from '../NothingHere'
 
-class PostPage extends Component {
-
-  render() {
-
-    const { postsIds } = this.props
+const PostPage = function ({ postsIds }) {
 
     return (
       <Fragment>
@@ -18,10 +15,17 @@ class PostPage extends Component {
         }
       </Fragment>
     )
-  }
 }
 
-function mapStateToProps({ posts }) {
+function mapStateToProps({ posts, sortBy, category }) {
+
+  if (posts && posts.length > 0 && category !== null && category !== 'all') {
+    posts = posts.filter(f => f.category === category)
+  }
+
+  console.log('POSTS FILTERED: ', posts)
+
+  posts = _.sortBy(posts, `${sortBy}`)
 
   return {
     postsIds: Object.values(posts).map(p => p.id)
