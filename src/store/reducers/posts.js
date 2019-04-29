@@ -1,4 +1,12 @@
-import { RECEIVE_POSTS, SORT_POSTS, VOTE_POST, FILTER_POSTS, ADD_POST, DELETE_POST } from '../actions/posts'
+import {
+  RECEIVE_POSTS,
+  SORT_POSTS,
+  VOTE_POST,
+  FILTER_POSTS,
+  ADD_POST,
+  DELETE_POST,
+  POST_DETAILS
+} from '../actions/posts'
 import _ from 'lodash'
 
 export default function posts (state = {}, action) {
@@ -39,10 +47,15 @@ export default function posts (state = {}, action) {
       }
 
     case DELETE_POST :
-      const posts = state.filter(post => post.id !== action.id)
       return {
-       ...posts
+       ...state.filter(post => post.id !== action.id)
       }
+
+    case POST_DETAILS :
+      return [
+        action.post
+      ]
+
     default :
       return state
   }

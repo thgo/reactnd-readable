@@ -1,5 +1,6 @@
 import React from 'react'
 import { Segment, Header, Icon, Card, CardContent, Button } from 'semantic-ui-react';
+import { Link } from 'react-router-dom'
 
 export default function NothingHere () {
   return (
@@ -13,7 +14,7 @@ export default function NothingHere () {
         </Segment>
       </CardContent>
       <Card.Content extra textAlign='center'>
-        <Button primary >Create new</Button>
+        <Button primary as={Link} to='/new'>Create new</Button>
       </Card.Content>
     </Card>
 

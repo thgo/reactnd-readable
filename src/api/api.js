@@ -37,6 +37,10 @@ export const getAllPostsAPI = () =>
   api.get('/posts')
     .then(posts => posts.data)
 
+export const getPostDetailsAPI = (id) =>
+  api.get(`/posts/${id}`)
+    .then(post => post.data)
+
 export const votePostAPI = (postId, vote) =>
   api.post(`/posts/${postId}`, { option: vote })
 
@@ -51,3 +55,18 @@ export const addPostAPI = (post) =>
 export const deletePostAPI = (id) =>
   api.delete(`/posts/${id}`)
     .then(res => res)
+
+export const getPostCommentsAPI = (id) =>
+  api.get(`/posts/${id}/comments`)
+    .then(comments => comments.data)
+
+export const addCommentAPI = (comment) =>
+  api.post('/comments', comment)
+    .then(comment => comment)
+
+export const deleteCommentAPI = (id) =>
+  api.delete(`/comments/${id}`)
+    .then(res => res)
+
+export const voteCommentAPI = (commentId, vote) =>
+  api.post(`/comments/${commentId}`, { option: vote })

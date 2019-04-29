@@ -8,10 +8,12 @@ const PostPage = function ({ postsIds }) {
 
     return (
       <Fragment>
-        { postsIds.length === 0 && <NothingHere /> }
-        { postsIds && postsIds.map(id => (
+        { postsIds
+          && postsIds.length > 0
+          ? postsIds.map(id => (
             <Post key={id} id={id} />
           ))
+          : <NothingHere />
         }
       </Fragment>
     )
@@ -22,8 +24,6 @@ function mapStateToProps({ posts, sortBy, category }) {
   if (posts && posts.length > 0 && category !== null && category !== 'all') {
     posts = posts.filter(f => f.category === category)
   }
-
-  console.log('POSTS FILTERED: ', posts)
 
   posts = _.sortBy(posts, `${sortBy}`)
 

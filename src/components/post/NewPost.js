@@ -103,9 +103,7 @@ class NewPost extends Component {
   }
 }
 
-function mapStateToProps ({ categories }, props) {
-
-  console.log('PROPS: ', props)
+function mapStateToProps ({ categories }) {
 
   return {
     categories

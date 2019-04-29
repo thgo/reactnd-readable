@@ -9,28 +9,12 @@ import { toggleCategory } from '../../store/actions/category';
 
 class Categories extends Component {
 
-  state = {
-    activeItem: 'all'
-  }
-
   options = [
     { key: 1, text: 'Date', value: 'timestamp' },
     { key: 2, text: 'Votescore', value: 'voteScore' }
   ]
 
-  componentDidMount() {
-
-    const { category } = this.props
-
-    console.log('DID MOUNT: ', category)
-
-    if (typeof category == String)
-      this.setState({ activeItem: category })
-
-  }
-
   handleItemClick = (e, { name }) => {
-    this.setState({ activeItem: name, category: name })
 
     const { dispatch } = this.props
 
@@ -51,8 +35,7 @@ class Categories extends Component {
   }
 
   render() {
-    const { activeItem } = this.state
-    const { categories, sortBy } = this.props
+    const { categories, sortBy, activeCategory } = this.props
     const option = _.find(this.options, {value: sortBy})
 
     return (
@@ -60,7 +43,7 @@ class Categories extends Component {
         <Menu pointing secondary>
           <Menu.Item
             name='all'
-            active={activeItem === 'all'}
+            active={activeCategory === 'all'}
             onClick={this.handleItemClick}
             as={Link}
             to="/"
@@ -70,10 +53,10 @@ class Categories extends Component {
                 key={idx}
                 name={category.name}
                 content={category.name}
-                active={activeItem === category.name}
+                active={activeCategory === category.name}
                 onClick={this.handleItemClick}
                 as={Link}
-                to={`/posts/${category.path}`}
+                to={`/category/${category.path}`}
               />
             ))
           }
@@ -104,8 +87,9 @@ function mapStateToProps ({ categories, sortBy, category }) {
   return {
     categories: Object.values(categories),
     sortBy,
-    category
+    activeCategory: category
   }
+
 }
 
 export default connect(mapStateToProps)(Categories)
