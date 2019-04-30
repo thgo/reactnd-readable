@@ -25,7 +25,7 @@ function mapStateToProps({ posts, sortBy, category }) {
     posts = posts.filter(f => f.category === category)
   }
 
-  posts = _.sortBy(posts, `${sortBy}`)
+  posts = _.orderBy(posts, `${sortBy}`, 'desc')
 
   return {
     postsIds: Object.values(posts).map(p => p.id)

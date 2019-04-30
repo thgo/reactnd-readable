@@ -1,6 +1,5 @@
 export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES'
 export const BY_CATEGORY = 'BY_CATEGORY'
-export const TOGGLE_CATEGORY = 'TOGGLE_CATEGORY'
 
 export function receiveCategories (categories) {
   return {
@@ -15,10 +14,3 @@ export function receiveByCategory (category) {
     category
   }
 }
-
-// export function toggleActiveCategory (category) {
-//   return {
-//     type: TOGGLE_CATEGORY,
-//     category,
-//   }
-// }

@@ -52,6 +52,10 @@ export const addPostAPI = (post) =>
   api.post('/posts', post)
     .then(res => res.data)
 
+export const editPostAPI = (id, title, body) =>
+  api.put(`/posts/${id}`, {title, body})
+    .then(post => post.data)
+
 export const deletePostAPI = (id) =>
   api.delete(`/posts/${id}`)
     .then(res => res)

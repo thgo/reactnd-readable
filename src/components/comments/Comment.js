@@ -41,7 +41,7 @@ class CommentComponent extends Component {
         <Comment.Content>
           <Comment.Author>{ comment.author }</Comment.Author>
           <Comment.Metadata style={{marginLeft: 0}}>
-            <Moment fromNow date={comment.timestamp} title={formatDate(comment.timestamp)}/>  |  { comment.voteScore } votes
+            <Moment fromNow date={new Date(comment.timestamp)} title={formatDate(comment.timestamp)}/>  |  { comment.voteScore } votes
           </Comment.Metadata>
           <Comment.Text>
             <p>{ comment.body }</p>

@@ -3,7 +3,7 @@ import _ from 'lodash'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Menu, Segment, Dropdown } from 'semantic-ui-react'
-import { handlePostsByCategory, getAllPosts } from '../../store/actions/posts'
+import { handlePostsByCategory } from '../../store/actions/posts'
 import { sortBy } from '../../store/actions/sortBy'
 import { toggleCategory } from '../../store/actions/category';
 
@@ -18,13 +18,7 @@ class Categories extends Component {
 
     const { dispatch } = this.props
 
-    dispatch(toggleCategory(name))
-
-    if (name !== 'all') {
-      dispatch(handlePostsByCategory(name))
-    } else {
-      dispatch(getAllPosts())
-    }
+    dispatch(handlePostsByCategory(name))
   }
 
   handleOrder = (e, { value }) => {

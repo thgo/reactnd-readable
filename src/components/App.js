@@ -7,7 +7,6 @@ import { handleInitialData } from '../store/actions/shared'
 import PostsPage from './post/PostsPage'
 
 import Nav from './header/Nav'
-import PostEdit from './post/PostEdit'
 import NewPost from './post/NewPost'
 import PostDetails from './post/PostDetails'
 
@@ -32,7 +31,7 @@ class App extends Component {
                   <Route path='/' exact component={PostsPage} />
                   <Route path='/category/:category' component={PostsPage} />
                   <Route path='/post/:id' component={PostDetails} />
-                  <Route path='/edit/post/:id' component={PostEdit} />
+                  <Route path='/edit/:id' component={NewPost} />
                   <Route path='/new' component={NewPost} />
                 </Grid.Column>
               </Grid>

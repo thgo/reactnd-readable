@@ -1,29 +1,26 @@
 import {
   RECEIVE_POSTS,
-  SORT_POSTS,
   VOTE_POST,
   FILTER_POSTS,
   ADD_POST,
+  EDIT_POST,
   DELETE_POST,
   POST_DETAILS
 } from '../actions/posts'
 import _ from 'lodash'
 
 export default function posts (state = {}, action) {
+
+  let postPosition = null
+
   switch (action.type) {
 
     case RECEIVE_POSTS :
       return action.posts
 
-    case SORT_POSTS :
-      return action.sortBy === 'votes'
-          ? _.sortBy(state, 'voteScore')
-          : _.sortBy(state, 'timestamp')
-
     case VOTE_POST :
 
-      const postPosition = Object.keys(state).filter(item =>
-        state[item].id === action.post.id)
+      postPosition = getPostPosition(state, action.post)
 
       return {
         ...state,
@@ -46,6 +43,17 @@ export default function posts (state = {}, action) {
         [state.length]: action.post
       }
 
+    case EDIT_POST :
+      postPosition = getPostPosition(state, action.post)
+      return {
+        ...state,
+        [postPosition]: {
+          ...state[postPosition],
+          title: action.post.title,
+          body: action.post.body
+        }
+      }
+
     case DELETE_POST :
       return {
        ...state.filter(post => post.id !== action.id)
@@ -59,4 +67,8 @@ export default function posts (state = {}, action) {
     default :
       return state
   }
+}
+
+function getPostPosition(posts, post) {
+  return Object.keys(posts).filter(item => posts[item].id === post.id)
 }

@@ -1,5 +1,5 @@
 import { showLoading, hideLoading } from 'react-redux-loading'
-import { addCommentAPI, getPostCommentsAPI, deleteCommentAPI, voteCommentAPI } from '../../api/api'
+import { addCommentAPI, getPostCommentsAPI, deleteCommentAPI, voteCommentAPI, generateUID } from '../../api/api'
 
 export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS'
 export const ADD_COMMENT = 'ADD_COMMENT'
@@ -48,7 +48,11 @@ export function handleAddComment (comment) {
   return dispatch => {
     dispatch(showLoading())
 
-    return addCommentAPI(comment)
+    return addCommentAPI({
+      ...comment,
+      id: generateUID(),
+      timestamp: new Date().getTime()
+    })
       .then(comment => dispatch(addComment(comment.data)))
       .then(() => hideLoading())
   }

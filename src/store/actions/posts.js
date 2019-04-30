@@ -1,11 +1,21 @@
-import { getAllPostsAPI, votePostAPI, filterPostsAPI, addPostAPI, generateUID, deletePostAPI, getPostDetailsAPI } from '../../api/api'
+import {
+  getAllPostsAPI,
+  votePostAPI,
+  filterPostsAPI,
+  addPostAPI,
+  generateUID,
+  deletePostAPI,
+  getPostDetailsAPI,
+  editPostAPI
+} from '../../api/api'
 import { showLoading, hideLoading } from 'react-redux-loading'
+import { toggleCategory } from './category';
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
-export const SORT_POSTS = 'SORT_POSTS'
 export const VOTE_POST = 'LIKE_POST'
 export const FILTER_POSTS = 'FILTER_POSTS'
 export const ADD_POST = 'ADD_POST'
+export const EDIT_POST = 'EDIT_POST'
 export const DELETE_POST = 'DELETE_POST'
 export const POST_DETAILS = 'POST_DETAILS'
 
@@ -13,13 +23,6 @@ export function receivePosts (posts) {
   return {
     type: RECEIVE_POSTS,
     posts,
-  }
-}
-
-export function handleSortPosts (sortBy) {
-  return {
-    type: SORT_POSTS,
-    sortBy,
   }
 }
 
@@ -42,6 +45,13 @@ function getPostsByCategory (posts, category) {
 function addNewPost (post) {
   return {
     type: ADD_POST,
+    post
+  }
+}
+
+function editPost (post) {
+  return {
+    type: EDIT_POST,
     post
   }
 }
@@ -93,6 +103,7 @@ export function handleAddNewPost ( title, body, author, category ) {
       body,
       author,
       category,
+      timestamp: new Date().getTime()
     })
       .then((post) => {
         console.log('retorno: ', post)
@@ -102,19 +113,29 @@ export function handleAddNewPost ( title, body, author, category ) {
   }
 }
 
+export function handleEditPost ( id, title, body ) {
+  return dispatch => {
+    dispatch(showLoading())
+    return editPostAPI(id, title, body)
+      .then(dispatch(hideLoading()))
+      .then(post => dispatch(editPost(post)))
+      .catch((e) => {
+        console.warn('Error in handleEditPost: ', e)
+      })
+  }
+}
+
 export function handlePostsByCategory (category) {
   return (dispatch) => {
     dispatch(showLoading())
     if (category === 'all') {
         return getAllPostsAPI()
-          .then((posts) => {
-            dispatch(receivePosts(posts))
-          })
+          .then((posts) => dispatch(receivePosts(posts)))
+          .then(() => dispatch(toggleCategory(category)))
       } else {
         return filterPostsAPI(category)
-          .then((posts) => {
-            dispatch(getPostsByCategory(posts, category))
-          })
+          .then((posts) => dispatch(getPostsByCategory(posts, category)))
+          .then(() => dispatch(toggleCategory(category)))
           .then(() => hideLoading())
       }
   }
@@ -128,7 +149,6 @@ export function handleVotePost (post, vote) {
       .catch((e) => {
         console.warn('Error in handleVotePost: ', e)
         dispatch(votePost(post, vote))
-        alert('Deu erro no postVote')
       })
   }
 }

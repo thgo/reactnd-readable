@@ -4,7 +4,7 @@ import { connect } from "react-redux"
 import { Link, Redirect } from 'react-router-dom'
 import Moment from 'react-moment'
 import { Card, Icon, Grid, Statistic, Button, Dropdown } from "semantic-ui-react"
-import { handleVotePost, handleDeletePost, handleReceivePostDetails } from '../../store/actions/posts'
+import { handleVotePost, handleDeletePost, handleReceivePostDetails, handlePostsByCategory } from '../../store/actions/posts'
 import { formatDate } from "../../utils/utils"
 import { toggleCategory } from "../../store/actions/category"
 
@@ -22,20 +22,18 @@ class Post extends Component {
 
   handleDeletePost = (e) => {
     e.preventDefault()
-    console.log('DELETE')
 
-    const { dispatch, post } = this.props
+    const { dispatch, post, category } = this.props
 
-    this.setState({ redirectTo: `/category/${post.category}` })
+    console.log('category: ', category)
+    console.log('POST category: ', post.category)
 
-    dispatch(toggleCategory(post.category))
+    if (category !== post.category) {
+      this.setState({ redirectTo: `/category/${category}` })
+      dispatch(handlePostsByCategory(category))
+    }
+
     dispatch(handleDeletePost(post.id))
-  }
-
-  handleEditPost = (e) => {
-    e.preventDefault()
-    console.log('EDIT')
-    //TODO: FAZER
   }
 
   handleGetPostDetails = (e) => {
@@ -50,7 +48,6 @@ class Post extends Component {
     const { post } = this.props
     const { redirectTo } = this.state
 
-    //TODO: Buscar posts da categoria quando voltar
     if (redirectTo !== null) {
       return <Redirect to={redirectTo} />
     }
@@ -77,7 +74,6 @@ class Post extends Component {
                   <Icon name='star' size='small'/>
                   { post.voteScore }
                 </Statistic.Value>
-                <Statistic.Label>Votes</Statistic.Label>
               </Statistic>
             </Grid.Column>
           </Grid>
@@ -90,16 +86,37 @@ class Post extends Component {
           <Grid columns='equal'>
             <Grid.Row>
               <Grid.Column>
-                <Icon name='clock outline' /> <Moment fromNow date={post.timestamp} title={formatDate(post.timestamp)}/>
+                <Icon name='clock outline' />
+                <Moment
+                  fromNow
+                  date={new Date(post.timestamp)}
+                  title={formatDate(post.timestamp)}
+                />
               </Grid.Column>
               <Grid.Column>
                 <Icon name='comment alternate outline' /> { post.commentCount } Comments
               </Grid.Column>
               <Grid.Column textAlign='right'>
-                <Dropdown icon="ellipsis vertical" title='Options' onClick={(e) => e.preventDefault()}>
+                <Dropdown
+                  icon="ellipsis vertical"
+                  title='Options'
+                  onClick={(e) => e.preventDefault()}
+                >
                   <Dropdown.Menu>
-                    <Dropdown.Item icon='edit outline' text='Edit' title='Edit this post' onClick={this.handleEditPost} />
-                    <Dropdown.Item icon='trash alternate outline' text='Remove' title='Delete this post' onClick={this.handleDeletePost} />
+                    <Dropdown.Item
+                      icon='edit outline'
+                      text='Edit'
+                      title='Edit this post'
+                      as={Link}
+                      to={`/edit/${post.id}`}
+                      style={{color: '#000'}}
+                    />
+                    <Dropdown.Item
+                      icon='trash alternate outline'
+                      text='Remove'
+                      title='Delete this post'
+                      onClick={this.handleDeletePost}
+                    />
                   </Dropdown.Menu>
                 </Dropdown>
               </Grid.Column>
@@ -110,12 +127,24 @@ class Post extends Component {
           <Grid columns='equal'>
             <Grid.Row>
               <Grid.Column>
-                <Button basic color='green' fluid name='upVote' onClick={this.handleLike}>
+                <Button
+                  basic
+                  fluid
+                  color='green'
+                  name='upVote'
+                  onClick={this.handleLike}
+                >
                   <Icon name='thumbs up outline' /> Like
                 </Button>
               </Grid.Column>
               <Grid.Column>
-                <Button basic color='red' fluid name='downVote' onClick={this.handleLike}>
+                <Button
+                  basic
+                  fluid
+                  color='red'
+                  name='downVote'
+                  onClick={this.handleLike}
+                >
                   <Icon name='thumbs down outline' /> Dislike
                 </Button>
               </Grid.Column>
@@ -127,10 +156,11 @@ class Post extends Component {
   }
 }
 
-function mapStateToProps({ posts }, { id }) {
+function mapStateToProps({ posts, category }, { id }) {
   return {
     post: _.find(posts, { id }),
-    id
+    id,
+    category
   }
 }
 
