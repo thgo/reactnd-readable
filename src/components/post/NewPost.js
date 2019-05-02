@@ -86,7 +86,7 @@ class NewPost extends Component {
     return (
       <Card fluid>
         <Card.Content>
-          <Card.Header style={{fontWeight: 'bold', fontSize: '1.3em'}}>{id === null ? 'Create new post' : 'Post edit'}</Card.Header>
+          <Card.Header style={{fontWeight: 'bold', fontSize: '1.3em'}}>{!id ? 'Create new post' : 'Post edit'}</Card.Header>
           <Card.Description>
             <Form onSubmit={this.handleSubmit}>
               <Form.Input
@@ -131,17 +131,7 @@ class NewPost extends Component {
                       name='save'
                       disabled={disableSubmit}
                     >
-                      <Icon name='thumbs up outline' /> Save
-                    </Button>
-                  </Grid.Column>
-                  <Grid.Column>
-                    <Button
-                      basic
-                      fluid
-                      color='red'
-                      name='cancel'
-                    >
-                      <Icon name='thumbs down outline' /> Cancel
+                      <Icon name='check' /> Save
                     </Button>
                   </Grid.Column>
                 </Grid.Row>

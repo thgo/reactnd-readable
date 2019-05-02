@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import Post from './Post'
 import Comments from '../comments/Comments'
@@ -10,7 +11,6 @@ class PostDetails extends Component {
 
   async componentDidMount() {
     const { dispatch } = this.props
-    console.log('PROPS: ', this.props)
     const { id } = this.props.match.params
 
     await dispatch(handleReceiveComments(id))
@@ -18,7 +18,8 @@ class PostDetails extends Component {
 
   handleAddComment = (author, body) => {
 
-    const { dispatch, id } = this.props
+    const { dispatch } = this.props
+    const { id } = this.props.match.params
 
     dispatch(handleAddComment({
       body,
@@ -30,6 +31,10 @@ class PostDetails extends Component {
   render() {
 
     const { id } = this.props.match.params
+
+    if (!id) {
+      return <Redirect to='/notfound' />
+    }
 
     return (
       <div>

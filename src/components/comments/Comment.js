@@ -21,7 +21,7 @@ class CommentComponent extends Component {
   handleDeleteComment = e => {
     e.preventDefault()
     const { dispatch, comment } = this.props
-    dispatch(handleDeleteComment(comment.id))
+    dispatch(handleDeleteComment(comment))
   }
 
   handleEditComment = e => {

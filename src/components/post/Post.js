@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import _ from 'lodash'
 import { connect } from "react-redux"
-import { Link, Redirect } from 'react-router-dom'
+import { Redirect, withRouter } from 'react-router-dom'
 import Moment from 'react-moment'
 import { Card, Icon, Grid, Statistic, Button } from "semantic-ui-react"
 import { handleVotePost, handleDeletePost, handleReceivePostDetails, handlePostsByCategory } from '../../store/actions/posts'
@@ -26,27 +26,20 @@ class Post extends Component {
 
     const { dispatch, post, category } = this.props
 
-    console.log('category: ', category)
-    console.log('POST category: ', post.category)
-
     if (category !== post.category && category !== 'all') {
       this.setState({ redirectTo: `/category/${category}` })
       dispatch(handlePostsByCategory(category))
-    } else {
-      //TODO: Checar esse detalhe, se deve redirecionar ou não
-      // e exibir a página 404 ao buscar um id inexistente
-      this.setState({ redirectTo: '/' })
     }
-
     dispatch(handleDeletePost(post.id))
   }
 
-  handleGetPostDetails = (e) => {
-
+  handleGetPostDetails = async () => {
     const { dispatch, post } = this.props
 
     dispatch(toggleCategory(post.category))
-    dispatch(handleReceivePostDetails(post.id))
+    await dispatch(handleReceivePostDetails(post.id))
+    console.log('handleGetPostDetails: ', post)
+    this.props.history.push(`/post/${post.id}`)
   }
 
   render() {
@@ -67,10 +60,9 @@ class Post extends Component {
           <Grid columns={2}>
             <Grid.Column width={13}>
               <Card.Header
-                as={Link}
-                to={`/post/${post.id}`}
+                title='View post details'
                 onClick={this.handleGetPostDetails}
-                style={{fontWeight: 'bold', fontSize: '1.3em'}}
+                style={{fontWeight: 'bold', fontSize: '1.3em', cursor: 'pointer', color: '#4DC4FF'}}
               > { post.title }
               </Card.Header>
               <Card.Meta style={{color: '#F0577C'}}>
@@ -152,4 +144,4 @@ function mapStateToProps({ posts, category }, { id }) {
   }
 }
 
-export default connect(mapStateToProps)(Post)
+export default withRouter(connect(mapStateToProps)(Post))

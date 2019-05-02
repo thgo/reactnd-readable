@@ -1,4 +1,10 @@
-import { RECEIVE_COMMENTS, ADD_COMMENT, DELETE_COMMENT, VOTE_COMMENT, EDIT_COMMENT } from '../actions/comments'
+import {
+  RECEIVE_COMMENTS,
+  ADD_COMMENT,
+  DELETE_COMMENT,
+  VOTE_COMMENT,
+  EDIT_COMMENT
+} from '../actions/comments'
 
 export default function comments (state = {}, action) {
 

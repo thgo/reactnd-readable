@@ -55,7 +55,7 @@ export default function posts (state = {}, action) {
       }
 
     case DELETE_POST :
-      const posts = state.filter(post => post.id !== action.id)
+      const posts = state ? state.filter(post => post.id !== action.id) : []
       return {
         ...posts
       }

@@ -6,6 +6,7 @@ import {
   generateUID,
   editCommentAPI
 } from '../../api/api'
+import { handleReceivePostDetails } from './posts'
 
 export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS'
 export const ADD_COMMENT = 'ADD_COMMENT'
@@ -64,13 +65,18 @@ export function handleAddComment (comment) {
       timestamp: new Date().getTime()
     })
       .then(comment => dispatch(addComment(comment.data)))
+      .then(() => dispatch(handleReceivePostDetails(comment.parentId)))
+      .catch((e) => {
+        console.warn('Error in handleAddComment: ', e)
+      })
   }
 }
 
-export function handleDeleteComment (id) {
+export function handleDeleteComment (comment) {
   return dispatch => {
-    return deleteCommentAPI(id)
-      .then(() => dispatch(deleteComment(id)))
+    return deleteCommentAPI(comment.id)
+      .then(() => dispatch(deleteComment(comment.id)))
+      .then(() => dispatch(handleReceivePostDetails(comment.parentId)))
   }
 }
 

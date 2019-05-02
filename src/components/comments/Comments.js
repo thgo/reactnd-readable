@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from "react"
+import _ from 'lodash'
 import { Comment, Divider, Segment } from "semantic-ui-react"
 import CommentComponent from './Comment'
 import { connect } from "react-redux"
@@ -32,9 +33,9 @@ class Comments extends Component {
   }
 }
 
-function mapStateToProps({ comments }) {
+function mapStateToProps({ comments, sortBy }) {
   return {
-    comments: Object.values(comments)
+    comments: _.orderBy(Object.values(comments), `${sortBy}`, 'desc')
   }
 }
 
