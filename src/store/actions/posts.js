@@ -8,7 +8,6 @@ import {
   getPostDetailsAPI,
   editPostAPI
 } from '../../api/api'
-import { showLoading, hideLoading } from 'react-redux-loading'
 import { toggleCategory } from './category';
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
@@ -72,10 +71,8 @@ function receivePostDetails (post) {
 
 export function handleReceivePostDetails (id) {
   return (dispatch) => {
-    dispatch(showLoading())
     return getPostDetailsAPI(id)
       .then(post => dispatch(receivePostDetails(post)))
-      .then(() => hideLoading())
       .catch((e) => {
         console.warn('Error in handleReveicePostDetails: ', e)
       })
@@ -84,19 +81,13 @@ export function handleReceivePostDetails (id) {
 
 export function handleDeletePost (id) {
   return (dispatch) => {
-    dispatch(showLoading())
     return deletePostAPI(id)
-      .then((res) => {
-        console.log('Retorno delete: ', res)
-        dispatch(deletePost(id))
-      })
-      .then(() => hideLoading())
+      .then(() => dispatch(deletePost(id)))
   }
 }
 
 export function handleAddNewPost ( title, body, author, category ) {
   return (dispatch) => {
-    dispatch(showLoading())
     return addPostAPI({
       id: generateUID(),
       title,
@@ -105,19 +96,13 @@ export function handleAddNewPost ( title, body, author, category ) {
       category,
       timestamp: new Date().getTime()
     })
-      .then((post) => {
-        console.log('retorno: ', post)
-        dispatch(addNewPost(post))
-      })
-      .then(() => hideLoading())
+      .then((post) => dispatch(addNewPost(post)))
   }
 }
 
 export function handleEditPost ( id, title, body ) {
   return dispatch => {
-    dispatch(showLoading())
     return editPostAPI(id, title, body)
-      .then(dispatch(hideLoading()))
       .then(post => dispatch(editPost(post)))
       .catch((e) => {
         console.warn('Error in handleEditPost: ', e)
@@ -127,7 +112,6 @@ export function handleEditPost ( id, title, body ) {
 
 export function handlePostsByCategory (category) {
   return (dispatch) => {
-    dispatch(showLoading())
     if (category === 'all') {
         return getAllPostsAPI()
           .then((posts) => dispatch(receivePosts(posts)))
@@ -136,7 +120,6 @@ export function handlePostsByCategory (category) {
         return filterPostsAPI(category)
           .then((posts) => dispatch(getPostsByCategory(posts, category)))
           .then(() => dispatch(toggleCategory(category)))
-          .then(() => hideLoading())
       }
   }
 }

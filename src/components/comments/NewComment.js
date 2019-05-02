@@ -38,7 +38,7 @@ class NewComment extends Component {
     const { author, body } = this.state
 
     return (
-      <Segment>
+      <Segment raised>
         <Form autoComplete='off' onSubmit={this.handleSubmit}>
           <Form.Input
             label='Author *'

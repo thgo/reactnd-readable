@@ -12,7 +12,7 @@ class Comments extends Component {
 
     return (
       <div>
-        <Segment>
+        <Segment raised>
           { comments
             && comments.length > 0
             ? comments.map((comment, idx) => (

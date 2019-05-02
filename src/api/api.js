@@ -74,3 +74,10 @@ export const deleteCommentAPI = (id) =>
 
 export const voteCommentAPI = (commentId, vote) =>
   api.post(`/comments/${commentId}`, { option: vote })
+
+export const editCommentAPI = (commentId, body) =>
+  api.put(`/comments/${commentId}`, {
+    timestamp: new Date().getTime(),
+    body
+  })
+  .then(comment => comment.data)

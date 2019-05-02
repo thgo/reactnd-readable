@@ -16,7 +16,7 @@ class Header extends Component {
 
   render() {
     return (
-      <Container fluid style={{position: 'fixed', zIndex: '999'}}>
+      <Container fluid style={{position: 'fixed', zIndex: '999', top: 0}}>
         <div style={{height: '170px', borderRadius: '0', backgroundColor: '#6335BF', boxShadow: '0 10px 10px rgb(99, 53, 191)'}}>
           <Grid style={{padding: '20px'}} verticalAlign={"middle"}>
             <Grid.Column width={2}>

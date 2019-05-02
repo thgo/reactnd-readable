@@ -1,6 +1,9 @@
-import { RECEIVE_COMMENTS, ADD_COMMENT, DELETE_COMMENT, VOTE_COMMENT } from '../actions/comments'
+import { RECEIVE_COMMENTS, ADD_COMMENT, DELETE_COMMENT, VOTE_COMMENT, EDIT_COMMENT } from '../actions/comments'
 
 export default function comments (state = {}, action) {
+
+  let commentPosition
+
   switch (action.type) {
 
     case RECEIVE_COMMENTS :
@@ -21,7 +24,7 @@ export default function comments (state = {}, action) {
 
     case VOTE_COMMENT :
 
-      const commentPosition = Object.keys(state)
+      commentPosition = Object.keys(state)
         .filter(item => state[item].id === action.comment.id)
 
       return {
@@ -31,6 +34,17 @@ export default function comments (state = {}, action) {
             voteScore: action.vote === 'upVote'
               ? action.comment.voteScore + 1
               : action.comment.voteScore - 1
+        }
+      }
+
+    case EDIT_COMMENT :
+      commentPosition = Object.keys(state)
+        .filter(item => state[item].id === action.comment.id)
+
+      return {
+        ...state,
+        [commentPosition]: {
+          ...action.comment
         }
       }
 

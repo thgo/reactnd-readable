@@ -3,10 +3,11 @@ import _ from 'lodash'
 import { connect } from "react-redux"
 import { Link, Redirect } from 'react-router-dom'
 import Moment from 'react-moment'
-import { Card, Icon, Grid, Statistic, Button, Dropdown } from "semantic-ui-react"
+import { Card, Icon, Grid, Statistic, Button } from "semantic-ui-react"
 import { handleVotePost, handleDeletePost, handleReceivePostDetails, handlePostsByCategory } from '../../store/actions/posts'
 import { formatDate } from "../../utils/utils"
 import { toggleCategory } from "../../store/actions/category"
+import Options from "../commons/Options";
 
 class Post extends Component {
 
@@ -28,9 +29,13 @@ class Post extends Component {
     console.log('category: ', category)
     console.log('POST category: ', post.category)
 
-    if (category !== post.category) {
+    if (category !== post.category && category !== 'all') {
       this.setState({ redirectTo: `/category/${category}` })
       dispatch(handlePostsByCategory(category))
+    } else {
+      //TODO: Checar esse detalhe, se deve redirecionar ou não
+      // e exibir a página 404 ao buscar um id inexistente
+      this.setState({ redirectTo: '/' })
     }
 
     dispatch(handleDeletePost(post.id))
@@ -47,6 +52,10 @@ class Post extends Component {
   render() {
     const { post } = this.props
     const { redirectTo } = this.state
+
+    if (!post) {
+      return <Redirect to='/notfound' />
+    }
 
     if (redirectTo !== null) {
       return <Redirect to={redirectTo} />
@@ -97,28 +106,7 @@ class Post extends Component {
                 <Icon name='comment alternate outline' /> { post.commentCount } Comments
               </Grid.Column>
               <Grid.Column textAlign='right'>
-                <Dropdown
-                  icon="ellipsis vertical"
-                  title='Options'
-                  onClick={(e) => e.preventDefault()}
-                >
-                  <Dropdown.Menu>
-                    <Dropdown.Item
-                      icon='edit outline'
-                      text='Edit'
-                      title='Edit this post'
-                      as={Link}
-                      to={`/edit/${post.id}`}
-                      style={{color: '#000'}}
-                    />
-                    <Dropdown.Item
-                      icon='trash alternate outline'
-                      text='Remove'
-                      title='Delete this post'
-                      onClick={this.handleDeletePost}
-                    />
-                  </Dropdown.Menu>
-                </Dropdown>
+                <Options redirect={`/edit/${post.id}`} handleDelete={this.handleDeletePost} />
               </Grid.Column>
             </Grid.Row>
           </Grid>

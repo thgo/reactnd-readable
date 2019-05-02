@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { Card, Grid, Button, Icon, Form } from "semantic-ui-react"
 import { handleAddNewPost, handlePostsByCategory, handleReceivePostDetails, handleEditPost } from "../../store/actions/posts";
 import { Redirect } from 'react-router-dom'
-import { toggleCategory } from "../../store/actions/category";
 
 class NewPost extends Component {
 
@@ -17,11 +16,11 @@ class NewPost extends Component {
     edit: false
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const { id, dispatch, post, category } = this.props
 
     if (id) {
-      await dispatch(handleReceivePostDetails(id))
+      dispatch(handleReceivePostDetails(id))
       .then(() => this.setState({
         ...post,
         edit: true
@@ -124,12 +123,24 @@ class NewPost extends Component {
               <Grid columns='equal'>
                 <Grid.Row>
                   <Grid.Column>
-                    <Button type='submit' basic color='green' fluid name='save' disabled={disableSubmit}>
+                    <Button
+                      basic
+                      fluid
+                      type='submit'
+                      color='green'
+                      name='save'
+                      disabled={disableSubmit}
+                    >
                       <Icon name='thumbs up outline' /> Save
                     </Button>
                   </Grid.Column>
                   <Grid.Column>
-                    <Button basic color='red' fluid name='cancel'>
+                    <Button
+                      basic
+                      fluid
+                      color='red'
+                      name='cancel'
+                    >
                       <Icon name='thumbs down outline' /> Cancel
                     </Button>
                   </Grid.Column>

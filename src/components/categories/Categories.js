@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import { Menu, Segment, Dropdown } from 'semantic-ui-react'
 import { handlePostsByCategory } from '../../store/actions/posts'
 import { sortBy } from '../../store/actions/sortBy'
-import { toggleCategory } from '../../store/actions/category';
 
 class Categories extends Component {
 

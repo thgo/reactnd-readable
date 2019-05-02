@@ -9,7 +9,9 @@ import { handleAddComment, handleReceiveComments } from '../../store/actions/com
 class PostDetails extends Component {
 
   async componentDidMount() {
-    const { id, dispatch } = this.props
+    const { dispatch } = this.props
+    console.log('PROPS: ', this.props)
+    const { id } = this.props.match.params
 
     await dispatch(handleReceiveComments(id))
   }
@@ -27,7 +29,7 @@ class PostDetails extends Component {
 
   render() {
 
-    const { id } = this.props
+    const { id } = this.props.match.params
 
     return (
       <div>
@@ -55,12 +57,4 @@ class PostDetails extends Component {
   }
 }
 
-function matStateToProps({}, props) {
-  const { id } = props.match.params
-
-  return {
-    id
-  }
-}
-
-export default connect(matStateToProps)(PostDetails)
+export default connect()(PostDetails)

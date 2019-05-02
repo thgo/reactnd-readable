@@ -1,10 +1,17 @@
-import { showLoading, hideLoading } from 'react-redux-loading'
-import { addCommentAPI, getPostCommentsAPI, deleteCommentAPI, voteCommentAPI, generateUID } from '../../api/api'
+import {
+  addCommentAPI,
+  getPostCommentsAPI,
+  deleteCommentAPI,
+  voteCommentAPI,
+  generateUID,
+  editCommentAPI
+} from '../../api/api'
 
 export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS'
 export const ADD_COMMENT = 'ADD_COMMENT'
 export const DELETE_COMMENT = 'DELETE_COMMENT'
 export const VOTE_COMMENT = 'VOTE_COMMENT'
+export const EDIT_COMMENT = 'EDIT_COMMENT'
 
 export function receiveComments (comments) {
   return {
@@ -34,37 +41,36 @@ function voteComment(comment, vote) {
     vote
   }
 }
+
+function editComment (comment) {
+  return {
+    type: EDIT_COMMENT,
+    comment
+  }
+}
+
 export function handleReceiveComments (parentId) {
   return dispatch => {
-    dispatch(showLoading())
-
     return getPostCommentsAPI(parentId)
       .then(comments => dispatch(receiveComments(comments)))
-      .then(() => hideLoading())
   }
 }
 
 export function handleAddComment (comment) {
   return dispatch => {
-    dispatch(showLoading())
-
     return addCommentAPI({
       ...comment,
       id: generateUID(),
       timestamp: new Date().getTime()
     })
       .then(comment => dispatch(addComment(comment.data)))
-      .then(() => hideLoading())
   }
 }
 
 export function handleDeleteComment (id) {
   return dispatch => {
-    dispatch(showLoading())
-
     return deleteCommentAPI(id)
       .then(() => dispatch(deleteComment(id)))
-      .then(() => hideLoading())
   }
 }
 
@@ -76,7 +82,17 @@ export function handleVoteComment (comment, vote) {
       .catch((e) => {
         console.warn('Error in handleVoteComment: ', e)
         dispatch(voteComment(comment, vote))
-        alert('Deu erro no postVote')
+      })
+  }
+}
+
+export function handleEditComment (comment, body) {
+  return dispatch => {
+    return editCommentAPI(comment.id, body)
+      .then(comment => dispatch(editComment(comment)))
+      .catch(e => {
+        console.warn('Error in handleEditComment: ', e)
+        dispatch(editComment(comment))
       })
   }
 }
