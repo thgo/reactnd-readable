@@ -24,17 +24,6 @@ const defaultData = {
     voteScore: -5,
     deleted: false,
     commentCount: 0
-  },
-  "6ni6ok3ym7mf1p33lney": {
-    id: '6ni6ok3ym7mf1p33lney',
-    timestamp: 1468479767170,
-    title: 'Learn Redux in 10 minutes MEu OVO!',
-    body: 'Just kidding. It takes more than 10 minutes to learn technology.',
-    author: 'thingone',
-    category: 'redux',
-    voteScore: 50,
-    deleted: false,
-    commentCount: 0
   }
 }
 
