@@ -5,15 +5,14 @@ import Post from './Post'
 import Comments from '../comments/Comments'
 import NewComment from '../comments/NewComment'
 import { Divider, Header, Icon } from 'semantic-ui-react'
-import { handleAddComment, handleReceiveComments } from '../../store/actions/comments'
+import { handleAddComment, handleReceiveComments } from '../../store/actions/commentsActions'
 
 class PostDetails extends Component {
 
-  async componentDidMount() {
+  componentDidMount() {
     const { dispatch } = this.props
     const { id } = this.props.match.params
-
-    await dispatch(handleReceiveComments(id))
+    dispatch(handleReceiveComments(id))
   }
 
   handleAddComment = (author, body) => {
@@ -30,15 +29,15 @@ class PostDetails extends Component {
 
   render() {
 
-    const { id } = this.props.match.params
+    const { post } = this.props
 
-    if (!id) {
+    if (!post) {
       return <Redirect to='/notfound' />
     }
 
     return (
       <div>
-        <Post id={id} />
+        <Post post={post} />
 
         <Divider horizontal>
           <Header as='h4'>
@@ -62,4 +61,13 @@ class PostDetails extends Component {
   }
 }
 
-export default connect()(PostDetails)
+function mapStateToProps({ posts }, props) {
+  const { id } = props.match.params
+  const post = posts.filter(post => post.id === id)[0]
+
+  return {
+    post
+  }
+}
+
+export default connect(mapStateToProps)(PostDetails)

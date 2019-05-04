@@ -1,10 +1,10 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import { Icon, Comment, Grid, Form, Button, Segment } from "semantic-ui-react"
-import { handleDeleteComment, handleVoteComment, handleEditComment } from "../../store/actions/comments"
+import { handleDeleteComment, handleVoteComment, handleEditComment } from "../../store/actions/commentsActions"
 import { formatDate } from "../../utils/utils"
 import Moment from "react-moment"
-import Options from "../commons/Options";
+import Options from "../commons/Options"
 
 class CommentComponent extends Component {
   state = {

@@ -6,7 +6,8 @@ import {
   generateUID,
   editCommentAPI
 } from '../../api/api'
-import { handleReceivePostDetails } from './posts'
+import { handleReceivePostDetails } from './postsActions'
+import _ from 'lodash'
 
 export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS'
 export const ADD_COMMENT = 'ADD_COMMENT'
@@ -58,14 +59,17 @@ export function handleReceiveComments (parentId) {
 }
 
 export function handleAddComment (comment) {
-  return dispatch => {
+  return (dispatch, getState) => {
+    const { posts } = getState()
+    const post = _.find(posts, {id: comment.parentId})
+
     return addCommentAPI({
       ...comment,
       id: generateUID(),
       timestamp: new Date().getTime()
     })
       .then(comment => dispatch(addComment(comment.data)))
-      .then(() => dispatch(handleReceivePostDetails(comment.parentId)))
+      .then(() => dispatch(handleReceivePostDetails(post.id)))
       .catch((e) => {
         console.warn('Error in handleAddComment: ', e)
       })

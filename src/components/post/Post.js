@@ -1,58 +1,55 @@
-import React, { Component } from "react"
-import _ from 'lodash'
-import { connect } from "react-redux"
-import { Redirect, withRouter } from 'react-router-dom'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import Moment from 'react-moment'
-import { Card, Icon, Grid, Statistic, Button } from "semantic-ui-react"
-import { handleVotePost, handleDeletePost, handleReceivePostDetails, handlePostsByCategory } from '../../store/actions/posts'
-import { formatDate } from "../../utils/utils"
-import { toggleCategory } from "../../store/actions/category"
-import Options from "../commons/Options";
+import { Card, Icon, Grid, Statistic, Button } from 'semantic-ui-react'
+import { handleVotePost, handleDeletePost, handleReceivePostDetails, handlePostsByCategory } from '../../store/actions/postsActions'
+import { formatDate } from '../../utils/utils'
+import { toggleCategory } from '../../store/actions/categoryActions'
+import Options from '../commons/Options'
 
 class Post extends Component {
 
-  state = {
-    redirectTo: null
-  }
-
+  /**
+   * Manipula e despacha o evento relacinado ao voto no post
+   */
   handleLike = (e, { name }) => {
     e.preventDefault()
     const { dispatch, post } = this.props
     dispatch(handleVotePost(post, name))
   }
 
+  /**
+   * Efetiva a remoção do post e, em seguida, seleciona a categoria do post deletado,
+   * caso a categoria anteriormente selecionada seja diferente de 'todos'
+   */
   handleDeletePost = (e) => {
     e.preventDefault()
 
     const { dispatch, post, category } = this.props
 
-    if (category !== post.category && category !== 'all') {
-      this.setState({ redirectTo: `/category/${category}` })
-      dispatch(handlePostsByCategory(category))
-    }
     dispatch(handleDeletePost(post.id))
+
+    if (category !== 'all') {
+      dispatch(handlePostsByCategory(category))
+      this.props.history.push(`/category/${category}`)
+    }
   }
 
-  handleGetPostDetails = async () => {
+  /**
+   * Altera a categoria na tela, conforme a categoria do post,
+   * e busca os detalhes do mesmo.
+   * Após, redireciona para o componente PostDetails.
+   */
+  handleGetPostDetails = () => {
     const { dispatch, post } = this.props
-
     dispatch(toggleCategory(post.category))
-    await dispatch(handleReceivePostDetails(post.id))
-    console.log('handleGetPostDetails: ', post)
+    dispatch(handleReceivePostDetails(post.id))
     this.props.history.push(`/post/${post.id}`)
   }
 
   render() {
     const { post } = this.props
-    const { redirectTo } = this.state
-
-    if (!post) {
-      return <Redirect to='/notfound' />
-    }
-
-    if (redirectTo !== null) {
-      return <Redirect to={redirectTo} />
-    }
 
     return (
       <Card fluid raised>
@@ -95,10 +92,14 @@ class Post extends Component {
                 />
               </Grid.Column>
               <Grid.Column>
-                <Icon name='comment alternate outline' /> { post.commentCount } Comments
+                <Icon name='comment alternate outline' />
+                { post.commentCount } Comments
               </Grid.Column>
               <Grid.Column textAlign='right'>
-                <Options redirect={`/edit/${post.id}`} handleDelete={this.handleDeletePost} />
+                <Options
+                  redirect={`/edit/${post.id}`}
+                  handleDelete={this.handleDeletePost}
+                />
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -136,10 +137,8 @@ class Post extends Component {
   }
 }
 
-function mapStateToProps({ posts, category }, { id }) {
+function mapStateToProps({ category }) {
   return {
-    post: _.find(posts, { id }),
-    id,
     category
   }
 }

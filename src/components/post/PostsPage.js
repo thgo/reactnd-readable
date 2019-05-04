@@ -4,14 +4,14 @@ import { connect } from 'react-redux'
 import Post from './Post'
 import NothingHere from '../NothingHere'
 
-const PostPage = function ({ postsIds }) {
+const PostPage = function ({ posts }) {
 
     return (
       <Fragment>
-        { postsIds
-          && postsIds.length > 0
-          ? postsIds.map(id => (
-            <Post key={id} id={id} />
+        { posts
+          && posts.length > 0
+          ? posts.map((post, idx) => (
+            <Post key={idx} post={post} />
           ))
           : <NothingHere />
         }
@@ -22,13 +22,13 @@ const PostPage = function ({ postsIds }) {
 function mapStateToProps({ posts, sortBy, category }) {
 
   if (posts && posts.length > 0 && category !== null && category !== 'all') {
-    posts = posts.filter(f => f.category === category)
+    posts = posts.filter(post => post.category === category)
   }
 
   posts = _.orderBy(posts, `${sortBy}`, 'desc')
 
   return {
-    postsIds: Object.values(posts).map(p => p.id)
+    posts
   }
 
 }

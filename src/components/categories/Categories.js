@@ -3,8 +3,8 @@ import _ from 'lodash'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Menu, Segment, Dropdown } from 'semantic-ui-react'
-import { handlePostsByCategory } from '../../store/actions/posts'
-import { sortBy } from '../../store/actions/sortBy'
+import { handlePostsByCategory } from '../../store/actions/postsActions'
+import { sortBy } from '../../store/actions/sortByActions'
 
 class Categories extends Component {
 
@@ -14,20 +14,18 @@ class Categories extends Component {
   ]
 
   handleItemClick = (e, { name }) => {
-
     const { dispatch } = this.props
-
     dispatch(handlePostsByCategory(name))
   }
 
   handleOrder = (e, { value }) => {
     e.preventDefault()
     const { dispatch } = this.props
-
     dispatch(sortBy(value))
   }
 
   render() {
+
     const { categories, sortBy, activeCategory } = this.props
     const option = _.find(this.options, {value: sortBy})
 

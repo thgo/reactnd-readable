@@ -6,7 +6,7 @@ import {
   EDIT_POST,
   DELETE_POST,
   POST_DETAILS
-} from '../actions/posts'
+} from '../actions/postsActions'
 import _ from 'lodash'
 
 export default function posts (state = {}, action) {
@@ -19,18 +19,17 @@ export default function posts (state = {}, action) {
       return action.posts
 
     case VOTE_POST :
-
       postPosition = getPostPosition(state, action.post)
-
-      return {
-        ...state,
-        [postPosition]: {
-          ...state[postPosition],
-            voteScore: action.vote === 'upVote'
-              ? action.post.voteScore + 1
-              : action.post.voteScore - 1
-        }
-      }
+      return [
+        ...state.slice(0, postPosition),
+        {
+           ...state[postPosition],
+           voteScore: action.vote === 'upVote'
+           ? action.post.voteScore + 1
+           : action.post.voteScore - 1
+        },
+        ...state.slice(postPosition + 1)
+     ]
 
     case FILTER_POSTS :
       return action.category !== 'all'
@@ -38,27 +37,27 @@ export default function posts (state = {}, action) {
         : action.posts
 
     case ADD_POST :
-      return {
+      return [
         ...state,
-        [state.length]: action.post
-      }
+        {
+          ...action.post
+        }
+      ]
 
     case EDIT_POST :
       postPosition = getPostPosition(state, action.post)
-      return {
-        ...state,
-        [postPosition]: {
+      return [
+        ...state.slice(0, postPosition),
+        {
           ...state[postPosition],
           title: action.post.title,
           body: action.post.body
-        }
-      }
+        },
+        ...state.slice(postPosition + 1)
+     ]
 
     case DELETE_POST :
-      const posts = state ? state.filter(post => post.id !== action.id) : []
-      return {
-        ...posts
-      }
+      return state.filter(post => post.id !== action.id)
 
     case POST_DETAILS :
       return [
@@ -71,5 +70,5 @@ export default function posts (state = {}, action) {
 }
 
 function getPostPosition(posts, post) {
-  return Object.keys(posts).filter(item => posts[item].id === post.id)
+  return posts.findIndex(item => item.id === post.id)
 }

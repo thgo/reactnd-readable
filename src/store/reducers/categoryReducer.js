@@ -1,9 +1,9 @@
-import { RECEIVE_CATEGORIES } from '../actions/categories'
+import { TOGGLE_CATEGORY } from '../actions/categoryActions'
 
 export default function categories (state = {}, action) {
   switch (action.type) {
-    case RECEIVE_CATEGORIES :
-      return action.categories
+    case TOGGLE_CATEGORY :
+      return action.category
     default :
       return state
   }

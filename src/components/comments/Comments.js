@@ -29,7 +29,7 @@ class Comments extends Component {
           }
         </Segment>
       </div>
-    );
+    )
   }
 }
 

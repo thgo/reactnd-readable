@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { Container, Grid } from 'semantic-ui-react'
-import Categories from '../categories/Categories';
-import { toggleCategory } from '../../store/actions/category';
+import Categories from '../categories/Categories'
+import { toggleCategory } from '../../store/actions/categoryActions'
 import { connect } from 'react-redux'
-import { getAllPosts } from './../../store/actions/posts';
+import { getAllPosts } from './../../store/actions/postsActions'
 
 class Header extends Component {
 

@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 import { Container, Grid } from 'semantic-ui-react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { handleInitialData } from '../store/actions/shared'
+import { handleInitialData } from '../store/actions/sharedActions'
 import PostsPage from './post/PostsPage'
 
 import Nav from './header/Nav'

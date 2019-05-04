@@ -1,4 +1,4 @@
-import { SORT_BY } from '../actions/sortBy'
+import { SORT_BY } from '../actions/sortByActions'
 
 export default function sortBy (state = {}, action) {
   switch (action.type) {

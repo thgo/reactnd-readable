@@ -1,8 +1,8 @@
-import React, { Component } from "react"
+import React, { Component } from 'react'
 import _ from 'lodash'
 import { connect } from 'react-redux'
-import { Card, Grid, Button, Icon, Form } from "semantic-ui-react"
-import { handleAddNewPost, handlePostsByCategory, handleReceivePostDetails, handleEditPost } from "../../store/actions/posts";
+import { Card, Grid, Button, Icon, Form } from 'semantic-ui-react'
+import { handleAddNewPost, handlePostsByCategory, handleEditPost } from '../../store/actions/postsActions'
 import { Redirect } from 'react-router-dom'
 
 class NewPost extends Component {
@@ -17,14 +17,13 @@ class NewPost extends Component {
   }
 
   componentDidMount() {
-    const { id, dispatch, post, category } = this.props
+    const { post, category } = this.props
 
-    if (id) {
-      dispatch(handleReceivePostDetails(id))
-      .then(() => this.setState({
+    if (post) {
+      this.setState({
         ...post,
         edit: true
-      }))
+      })
     } else {
       this.setState({
         category
@@ -36,16 +35,20 @@ class NewPost extends Component {
     this.setState({ [name]: value })
   }
 
+  /**
+   * Submete o formulário com os dados do post,
+   * caso seja uma edição, despacha a ação de atualizar o post,
+   * caso seja um novo post, despacha a ação de criação de um novo post.
+   *
+   * Após submetido, encaminha o usuário à categoria do post.
+   */
   handleSubmit = () => {
 
     const { title, body, author, category, edit } = this.state
     const { id, dispatch } = this.props
 
-    console.log('EDIT? ', edit)
-
     if (edit === false) {
       dispatch(handleAddNewPost(title, body, author, category))
-
     } else {
       dispatch(handleEditPost(id, title, body))
     }
@@ -150,8 +153,8 @@ function mapStateToProps ({ categories, posts, category }, props) {
 
   return {
     categories,
-    id,
     category,
+    id,
     post: id !== null ? _.find(posts, {id}) : null
   }
 }

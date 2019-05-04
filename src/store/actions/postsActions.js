@@ -8,7 +8,7 @@ import {
   getPostDetailsAPI,
   editPostAPI
 } from '../../api/api'
-import { toggleCategory } from './category';
+import { toggleCategory } from './categoryActions'
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 export const VOTE_POST = 'LIKE_POST'
@@ -70,7 +70,7 @@ function receivePostDetails (post) {
 }
 
 export function handleReceivePostDetails (id) {
-  return (dispatch) => {
+  return dispatch => {
     return getPostDetailsAPI(id)
       .then(post => dispatch(receivePostDetails(post)))
       .catch((e) => {
@@ -80,14 +80,14 @@ export function handleReceivePostDetails (id) {
 }
 
 export function handleDeletePost (id) {
-  return (dispatch) => {
+  return dispatch => {
     return deletePostAPI(id)
       .then(() => dispatch(deletePost(id)))
   }
 }
 
 export function handleAddNewPost ( title, body, author, category ) {
-  return (dispatch) => {
+  return dispatch => {
     return addPostAPI({
       id: generateUID(),
       title,
@@ -111,21 +111,26 @@ export function handleEditPost ( id, title, body ) {
 }
 
 export function handlePostsByCategory (category) {
-  return (dispatch) => {
+  return dispatch => {
+    console.log('handlePostsByCategory foi chamado: ', category)
     if (category === 'all') {
         return getAllPostsAPI()
-          .then((posts) => dispatch(receivePosts(posts)))
-          .then(() => dispatch(toggleCategory(category)))
+          .then((posts) => {
+            dispatch(toggleCategory(category))
+            dispatch(receivePosts(posts))
+          })
       } else {
         return filterPostsAPI(category)
-          .then((posts) => dispatch(getPostsByCategory(posts, category)))
-          .then(() => dispatch(toggleCategory(category)))
+          .then((posts) => {
+            dispatch(toggleCategory(category))
+            dispatch(getPostsByCategory(posts, category))
+          })
       }
   }
 }
 
 export function handleVotePost (post, vote) {
-  return (dispatch) => {
+  return dispatch => {
     dispatch(votePost(post, vote))
 
     return votePostAPI(post.id, vote)
@@ -137,7 +142,8 @@ export function handleVotePost (post, vote) {
 }
 
 export function getAllPosts() {
-  return (dispatch) => {
+  return dispatch => {
+    console.log('getAllPosts foi chamado!')
     return getAllPostsAPI()
       .then((posts) => {
         dispatch(receivePosts(posts))
