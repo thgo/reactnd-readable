@@ -1,15 +1,15 @@
-import React, { Component } from "react"
-import { connect } from "react-redux"
-import { Icon, Comment, Grid, Form, Button, Segment } from "semantic-ui-react"
-import { handleDeleteComment, handleVoteComment, handleEditComment } from "../../store/actions/commentsActions"
-import { formatDate } from "../../utils/utils"
-import Moment from "react-moment"
-import Options from "../commons/Options"
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { Icon, Comment, Grid, Form, Button, Segment } from 'semantic-ui-react'
+import { handleDeleteComment, handleVoteComment, handleEditComment } from '../../store/actions/commentsActions'
+import { formatDate } from '../../utils/utils'
+import Moment from 'react-moment'
+import Options from '../commons/Options'
 
 class CommentComponent extends Component {
   state = {
     isEditing: false,
-    body: ""
+    body: ''
   }
 
   handleClickVote = (e, vote) => {
@@ -67,10 +67,7 @@ class CommentComponent extends Component {
 
     return (
       <Comment>
-        <Comment.Avatar
-          as="a"
-          src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Ei-user.svg"
-        />
+        <Comment.Avatar as='a' src='/user.svg' />
         <Comment.Content>
           <Comment.Author>{comment.author}</Comment.Author>
 
@@ -94,20 +91,20 @@ class CommentComponent extends Component {
               <Segment raised clearing>
                 <Form onSubmit={this.handleSubmit}>
                   <Form.TextArea
-                    label="Message *"
-                    placeholder="Message"
-                    name="body"
+                    label='Message *'
+                    placeholder='Message'
+                    name='body'
                     value={body}
                     onChange={this.handleChange}
                   />
                   <Button.Group floated='right'>
                     <Button
                       positive
-                      content="Save"
-                      disabled={body === ""}
+                      content='Save'
+                      disabled={body === ''}
                       onClick={this.handleSaveEditComment} />
                     <Button.Or />
-                    <Button color="red" content="Cancel" onClick={this.handleCancelEditComment} />
+                    <Button color='red' content='Cancel' onClick={this.handleCancelEditComment} />
                   </Button.Group>
                 </Form>
               </Segment>
@@ -117,36 +114,39 @@ class CommentComponent extends Component {
           </Comment.Text>
 
           <Comment.Actions>
-            <Grid columns="2">
+            <Grid columns='2'>
               <Grid.Column>
                 <Comment.Action>
                   <Icon
                     link
-                    name="thumbs up outline"
-                    color="green"
+                    name='thumbs up outline'
+                    color='green'
                     title='Like this comment'
-                    onClick={e => this.handleClickVote(e, "upVote")}
+                    onClick={e => this.handleClickVote(e, 'upVote')}
                   />
                 </Comment.Action>
                 <Comment.Action>
                   <Icon
                     link
-                    name="thumbs down outline"
-                    color="red"
+                    name='thumbs down outline'
+                    color='red'
                     title='Dislike this comment'
-                    onClick={e => this.handleClickVote(e, "downVote")}
+                    onClick={e => this.handleClickVote(e, 'downVote')}
                   />
                 </Comment.Action>
               </Grid.Column>
-              <Grid.Column textAlign="right">
+              <Grid.Column textAlign='right'>
                 <Comment.Action>
-                  <Options handleEdit={this.handleEditComment} handleDelete={this.handleDeleteComment} />
-
-
+                  <Options
+                    handleEdit={this.handleEditComment}
+                    handleDelete={this.handleDeleteComment}
+                  />
                 </Comment.Action>
+
               </Grid.Column>
             </Grid>
           </Comment.Actions>
+
         </Comment.Content>
       </Comment>
     )

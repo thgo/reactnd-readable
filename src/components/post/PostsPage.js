@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import _ from 'lodash'
 import { connect } from 'react-redux'
 import Post from './Post'
-import NothingHere from '../NothingHere'
+import NothingHere from '../commons/NothingHere'
 
 const PostPage = function ({ posts }) {
 

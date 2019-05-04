@@ -8,7 +8,7 @@ import PostsPage from './post/PostsPage'
 import Nav from './header/Nav'
 import NewPost from './post/NewPost'
 import PostDetails from './post/PostDetails'
-import Notfound from './Notfound'
+import Notfound from './commons/Notfound'
 
 class App extends Component {
 

@@ -112,7 +112,6 @@ export function handleEditPost ( id, title, body ) {
 
 export function handlePostsByCategory (category) {
   return dispatch => {
-    console.log('handlePostsByCategory foi chamado: ', category)
     if (category === 'all') {
         return getAllPostsAPI()
           .then((posts) => {
@@ -143,7 +142,6 @@ export function handleVotePost (post, vote) {
 
 export function getAllPosts() {
   return dispatch => {
-    console.log('getAllPosts foi chamado!')
     return getAllPostsAPI()
       .then((posts) => {
         dispatch(receivePosts(posts))

@@ -54,7 +54,13 @@ class NewComment extends Component {
             value={body}
             onChange={this.handleChange}
           />
-          <Button content='Add Comment' labelPosition='left' icon='edit' primary disabled={author === '' || body === ''} />
+          <Button
+            primary
+            content='Add Comment'
+            labelPosition='left'
+            icon='edit'
+            disabled={author === '' || body === ''}
+          />
         </Form>
       </Segment>
     )
