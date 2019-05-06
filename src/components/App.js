@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { Container, Grid } from 'semantic-ui-react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { handleInitialData } from '../store/actions/sharedActions'
@@ -13,8 +14,8 @@ import Notfound from './commons/Notfound'
 class App extends Component {
 
   async componentDidMount() {
-    const { dispatch } = this.props
-    await dispatch(handleInitialData())
+    const { handleInitialData } = this.props
+    await handleInitialData()
   }
 
   render() {
@@ -29,11 +30,11 @@ class App extends Component {
               <Grid.Column>
                 <Switch>
                   <Route path='/' exact component={PostsPage} />
-                  <Route path='/category/:category' component={PostsPage} />
-                  <Route path='/post/:id' component={PostDetails} />
-                  <Route path='/edit/:id' component={NewPost} />
                   <Route path='/new' component={NewPost} />
-                  <Route component={Notfound} />
+                  <Route path='/notfound' component={Notfound} />
+                  <Route path='/edit/:id' component={NewPost} />
+                  <Route path='/:category/:id' component={PostDetails} />
+                  <Route path='/:category' component={PostsPage} />
                 </Switch>
               </Grid.Column>
             </Grid>
@@ -45,4 +46,8 @@ class App extends Component {
   }
 }
 
-export default connect()(App)
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ handleInitialData }, dispatch)
+}
+
+export default connect(null, mapDispatchToProps)(App)

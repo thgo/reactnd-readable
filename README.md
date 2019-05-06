@@ -8,7 +8,7 @@ O projeto enfatiza o uso de Redux para gerenciar o estado da aplicação.
 
 ## Instalação e execução
 
-Para instalar e executar, é necessário ter o `npm` ou `yarn` instalado na máquina.
+Para instalar e executar o projeto, é necessário ter o `npm` ou `yarn` instalado na máquina.
 Caso não possua, baixe a seguir:
 
   * npm: https://nodejs.org/en/download/
@@ -33,6 +33,21 @@ ou
 ~~~
 yarn install
 yarn start
+~~~
+
+## Servidor
+
+O servidor da aplicação encontra-se na pasta server e contém a implementação do Backend.
+Para instalar as dependências do projeto, pode ser utilizado o `npm` ou o `yarn`, como explicado no tópico anterior.
+
+Para iniciar o projeto, é necessário ter o `NodeJS` instalado, que pode ser baixado em:
+
+  * NodeJS: https://nodejs.org/
+
+Para iniciar o servidor, basta acessar a pasta `server` e executar o seguinte comando:
+
+~~~
+  node server
 ~~~
 
 # Bibliotecas de terceiros

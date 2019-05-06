@@ -1,86 +1,94 @@
-import React, { Component } from 'react'
+import React from 'react'
 import _ from 'lodash'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Menu, Segment, Dropdown } from 'semantic-ui-react'
 import { handlePostsByCategory } from '../../store/actions/postsActions'
 import { sortBy } from '../../store/actions/sortByActions'
+import { bindActionCreators } from 'redux'
 
-class Categories extends Component {
+const Categories = function({
+  categories,
+  sortByProp,
+  activeCategory,
+  handlePostsByCategory,
+  sortBy
+  }) {
 
-  options = [
+  const options = [
     { key: 1, text: 'Date', value: 'timestamp' },
     { key: 2, text: 'Votescore', value: 'voteScore' }
   ]
 
-  handleItemClick = (e, { name }) => {
-    const { dispatch } = this.props
-    dispatch(handlePostsByCategory(name))
+  const handleItemClick = (e, { name }) => {
+    handlePostsByCategory(name)
   }
 
-  handleOrder = (e, { value }) => {
+  const handleOrder = (e, { value }) => {
     e.preventDefault()
-    const { dispatch } = this.props
-    dispatch(sortBy(value))
+    sortBy(value)
   }
 
-  render() {
+  const option = _.find(options, {value: sortByProp})
 
-    const { categories, sortBy, activeCategory } = this.props
-    const option = _.find(this.options, {value: sortBy})
+  console.log(option)
 
-    return (
-      <Segment style={{margin: 0}}>
-        <Menu pointing secondary>
-          <Menu.Item
-            name='all'
-            active={activeCategory === 'all'}
-            onClick={this.handleItemClick}
-            as={Link}
-            to="/"
-          />
-          { categories && categories.length > 0 && categories.map((category, idx) => (
-              <Menu.Item
-                key={idx}
-                name={category.name}
-                content={category.name}
-                active={activeCategory === category.name}
-                onClick={this.handleItemClick}
-                as={Link}
-                to={`/category/${category.path}`}
+  return (
+    <Segment style={{margin: 0}}>
+      <Menu pointing secondary>
+        <Menu.Item
+          name='all'
+          active={activeCategory === 'all'}
+          onClick={handleItemClick}
+          as={Link}
+          to="/"
+        />
+        { categories && categories.length > 0 && categories.map((category, idx) => (
+            <Menu.Item
+              key={idx}
+              name={category.name}
+              content={category.name}
+              active={activeCategory === category.name}
+              onClick={handleItemClick}
+              as={Link}
+              to={`/${category.path}`}
+            />
+          ))
+        }
+        <Menu.Menu position='right'>
+          <Dropdown text={`Sort by: ${option ? option.text : ''}`}>
+            <Dropdown.Menu>
+              <Dropdown.Item
+                text='Date'
+                value='timestamp'
+                onClick={handleOrder}
               />
-            ))
-          }
-          <Menu.Menu position='right'>
-            <Dropdown text={`Sort by: ${option ? option.text : ''}`}>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  text='Date'
-                  value='timestamp'
-                  onClick={this.handleOrder}
-                />
-                <Dropdown.Item
-                  text='Votescore'
-                  value='voteScore'
-                  onClick={this.handleOrder}
-                />
-              </Dropdown.Menu>
-            </Dropdown>
-          </Menu.Menu>
-        </Menu>
-      </Segment>
-    )
-  }
+              <Dropdown.Item
+                text='Votescore'
+                value='voteScore'
+                onClick={handleOrder}
+              />
+            </Dropdown.Menu>
+          </Dropdown>
+        </Menu.Menu>
+      </Menu>
+    </Segment>
+  )
 }
 
-function mapStateToProps ({ categories, sortBy, category }) {
-
+function mapStateToProps({ categories, sortBy, category }) {
   return {
     categories: Object.values(categories),
-    sortBy,
+    sortByProp: sortBy,
     activeCategory: category
   }
-
 }
 
-export default connect(mapStateToProps)(Categories)
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ handlePostsByCategory, sortBy}, dispatch)
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Categories)

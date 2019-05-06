@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { Card, Grid, Button, Icon, Form } from 'semantic-ui-react'
 import { handleAddNewPost, handlePostsByCategory, handleEditPost } from '../../store/actions/postsActions'
 import { Redirect } from 'react-router-dom'
+import { bindActionCreators } from 'redux';
 
 class NewPost extends Component {
 
@@ -44,17 +45,28 @@ class NewPost extends Component {
    */
   handleSubmit = () => {
 
-    const { title, body, author, category, edit } = this.state
-    const { id, dispatch } = this.props
+    const {
+      title,
+      body,
+      author,
+      category,
+      edit
+    } = this.state
+    const {
+      id,
+      handleAddNewPost,
+      handleEditPost,
+      handlePostsByCategory
+    } = this.props
 
     if (edit === false) {
-      dispatch(handleAddNewPost(title, body, author, category))
+      handleAddNewPost(title, body, author, category)
     } else {
-      dispatch(handleEditPost(id, title, body))
+      handleEditPost(id, title, body)
     }
 
-    this.setState({redirectTo: `/category/${category}`})
-    dispatch(handlePostsByCategory(category))
+    this.setState({redirectTo: `/${category}`})
+    handlePostsByCategory(category)
   }
 
   render() {
@@ -159,4 +171,12 @@ function mapStateToProps ({ categories, posts, category }, props) {
   }
 }
 
-export default connect(mapStateToProps)(NewPost)
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    handleAddNewPost,
+    handleEditPost,
+    handlePostsByCategory
+  }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewPost)

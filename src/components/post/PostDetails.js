@@ -6,25 +6,26 @@ import Comments from '../comments/Comments'
 import NewComment from '../comments/NewComment'
 import { Divider, Header, Icon } from 'semantic-ui-react'
 import { handleAddComment, handleReceiveComments } from '../../store/actions/commentsActions'
+import { bindActionCreators } from 'redux';
 
 class PostDetails extends Component {
 
   componentDidMount() {
-    const { dispatch } = this.props
+    const { handleReceiveComments } = this.props
     const { id } = this.props.match.params
-    dispatch(handleReceiveComments(id))
+    handleReceiveComments(id)
   }
 
   handleAddComment = (author, body) => {
 
-    const { dispatch } = this.props
+    const { handleAddComment } = this.props
     const { id } = this.props.match.params
 
-    dispatch(handleAddComment({
+    handleAddComment({
       body,
       author,
       parentId: id
-    }))
+    })
   }
 
   render() {
@@ -70,4 +71,11 @@ function mapStateToProps({ posts }, props) {
   }
 }
 
-export default connect(mapStateToProps)(PostDetails)
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    handleReceiveComments,
+    handleAddComment
+  }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostDetails)

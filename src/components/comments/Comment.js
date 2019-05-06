@@ -5,6 +5,7 @@ import { handleDeleteComment, handleVoteComment, handleEditComment } from '../..
 import { formatDate } from '../../utils/utils'
 import Moment from 'react-moment'
 import Options from '../commons/Options'
+import { bindActionCreators } from 'redux';
 
 class CommentComponent extends Component {
   state = {
@@ -14,14 +15,14 @@ class CommentComponent extends Component {
 
   handleClickVote = (e, vote) => {
     e.preventDefault()
-    const { dispatch, comment } = this.props
-    dispatch(handleVoteComment(comment, vote))
+    const { handleVoteComment, comment } = this.props
+    handleVoteComment(comment, vote)
   }
 
   handleDeleteComment = e => {
     e.preventDefault()
-    const { dispatch, comment } = this.props
-    dispatch(handleDeleteComment(comment))
+    const { handleDeleteComment, comment } = this.props
+    handleDeleteComment(comment)
   }
 
   handleEditComment = e => {
@@ -46,10 +47,10 @@ class CommentComponent extends Component {
 
   handleSaveEditComment = e => {
     e.preventDefault()
-    const { comment, dispatch } = this.props
+    const { comment, handleEditComment } = this.props
     const { body }  = this.state
 
-    dispatch(handleEditComment(comment, body))
+    handleEditComment(comment, body)
     this.handleCancelEditComment()
   }
 
@@ -153,4 +154,12 @@ class CommentComponent extends Component {
   }
 }
 
-export default connect()(CommentComponent)
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    handleVoteComment,
+    handleDeleteComment,
+    handleEditComment
+  }, dispatch)
+}
+
+export default connect(null, mapDispatchToProps)(CommentComponent)

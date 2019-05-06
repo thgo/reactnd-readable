@@ -2,11 +2,23 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import Moment from 'react-moment'
-import { Card, Icon, Grid, Statistic, Button } from 'semantic-ui-react'
-import { handleVotePost, handleDeletePost, handleReceivePostDetails, handlePostsByCategory } from '../../store/actions/postsActions'
+import {
+  Card,
+  Icon,
+  Grid,
+  Statistic,
+  Button
+} from 'semantic-ui-react'
+import {
+  handleVotePost,
+  handleDeletePost,
+  handleReceivePostDetails,
+  handlePostsByCategory
+} from '../../store/actions/postsActions'
 import { formatDate } from '../../utils/utils'
 import { toggleCategory } from '../../store/actions/categoryActions'
 import Options from '../commons/Options'
+import { bindActionCreators } from 'redux'
 
 class Post extends Component {
 
@@ -15,8 +27,8 @@ class Post extends Component {
    */
   handleLike = (e, { name }) => {
     e.preventDefault()
-    const { dispatch, post } = this.props
-    dispatch(handleVotePost(post, name))
+    const { handleVotePost, post } = this.props
+    handleVotePost(post, name)
   }
 
   /**
@@ -26,13 +38,18 @@ class Post extends Component {
   handleDeletePost = (e) => {
     e.preventDefault()
 
-    const { dispatch, post, category } = this.props
+    const {
+      handleDeletePost,
+      handlePostsByCategory,
+      post,
+      category
+    } = this.props
 
-    dispatch(handleDeletePost(post.id))
+    handleDeletePost(post.id)
 
     if (category !== 'all') {
-      dispatch(handlePostsByCategory(category))
-      this.props.history.push(`/category/${category}`)
+      handlePostsByCategory(category)
+      this.props.history.push(`/${category}`)
     }
   }
 
@@ -42,10 +59,10 @@ class Post extends Component {
    * Após, redireciona para o componente PostDetails.
    */
   handleGetPostDetails = () => {
-    const { dispatch, post } = this.props
-    dispatch(toggleCategory(post.category))
-    dispatch(handleReceivePostDetails(post.id))
-    this.props.history.push(`/post/${post.id}`)
+    const { toggleCategory, handleReceivePostDetails, post } = this.props
+    toggleCategory(post.category)
+    handleReceivePostDetails(post.id)
+    this.props.history.push(`/${post.category}/${post.id}`)
   }
 
   render() {
@@ -143,4 +160,15 @@ function mapStateToProps({ category }) {
   }
 }
 
-export default withRouter(connect(mapStateToProps)(Post))
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    handleVotePost,
+    handleDeletePost,
+    handlePostsByCategory,
+    toggleCategory,
+    handleReceivePostDetails
+
+  }, dispatch)
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Post))
