@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.19.0",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
     "react": "^16.8.6",
@@ -19,7 +19,8 @@
     "redux-persist": "^5.10.0",
     "redux-thunk": "^2.3.0",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^0.86.0"
+    "semantic-ui-react": "^0.86.0",
+    "handlebars": "4.1.2"
   },
   "scripts": {
     "start": "react-scripts start",
